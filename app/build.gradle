@@ -9,6 +9,7 @@ plugins {
 dependencies {
     implementation group: 'org.apache.beam', name: 'beam-sdks-java-core', version: '2.36.0'
     implementation group: 'org.apache.beam', name: 'beam-runners-direct-java', version: '2.36.0'
+    implementation 'org.apache.beam:beam-sdks-java-extensions-google-cloud-platform-core:2.37.0'
 
     testImplementation group: 'junit', name: 'junit', version: '4.13.2'
     testImplementation group: 'org.hamcrest', name: 'hamcrest-junit', version: '2.0.0.0'
