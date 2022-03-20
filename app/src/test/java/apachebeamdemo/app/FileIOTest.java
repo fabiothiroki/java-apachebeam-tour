@@ -4,15 +4,12 @@ import org.apache.beam.sdk.io.TextIO;
 import org.apache.beam.sdk.testing.PAssert;
 import org.apache.beam.sdk.testing.TestPipeline;
 import org.apache.beam.sdk.transforms.Count;
-import org.apache.beam.sdk.transforms.FlatMapElements;
 import org.apache.beam.sdk.transforms.MapElements;
 import org.apache.beam.sdk.values.KV;
 import org.apache.beam.sdk.values.PCollection;
 import org.apache.beam.sdk.values.TypeDescriptors;
 import org.junit.Rule;
 import org.junit.Test;
-
-import java.util.Arrays;
 
 public class FileIOTest {
 
@@ -25,8 +22,7 @@ public class FileIOTest {
                 pipeline.apply(TextIO.read().from("./src/main/resources/words.txt"));
 
         PCollection<String> output = input.apply(
-                FlatMapElements.into(TypeDescriptors.strings())
-                        .via((String line) -> Arrays.asList(line.split(" ")))
+                new WordsFileParser()
         );
 
         PAssert.that(output)
@@ -41,11 +37,8 @@ public class FileIOTest {
                 pipeline.apply(TextIO.read().from("./src/main/resources/words.txt"));
 
         PCollection<KV<String, Long>> output = input
-                .apply(
-                    FlatMapElements.into(TypeDescriptors.strings())
-                        .via((String line) -> Arrays.asList(line.split(" ")))
-                )
-                .apply(Count.<String>perElement());;
+                .apply(new WordsFileParser())
+                .apply(Count.<String>perElement());
 
         PAssert.that(output)
                 .containsInAnyOrder(
